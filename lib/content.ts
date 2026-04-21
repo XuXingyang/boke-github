@@ -12,7 +12,9 @@ function getAllMdFiles(dir: string): string[] {
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name)
     if (entry.isDirectory()) {
-      files.push(...getAllMdFiles(fullPath))
+      if (!entry.name.startsWith('_')) {
+        files.push(...getAllMdFiles(fullPath))
+      }
     } else if (entry.name.endsWith('.md') && !entry.name.startsWith('_')) {
       files.push(fullPath)
     }
