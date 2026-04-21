@@ -134,7 +134,11 @@ list_articles(filter?)
 - `update_frontmatter(slug: string, data: Partial<ArticleMeta>): void`
 - `generate_summary(slug: string): string`
 - `search_content(query: string): ArticleMeta[]`
-- `import_markdown(files: File[]): ImportResult`
+
+**导入工具（`lib/tools/import.ts`）**
+- `import_markdown(files: ParsedFile[]): ImportResult`
+- `parse_notion_zip(zip: Buffer): ParsedFile[]`
+- `parse_obsidian_zip(zip: Buffer): ParsedFile[]`
 
 **记忆工具（`lib/tools/memory.ts`）**
 - `check_memory(query: string): MemoryCheckResult`
@@ -144,7 +148,7 @@ list_articles(filter?)
 
 ### 4.6 多模型切换
 
-`lib/models.ts` 统一接口，通过环境变量 + 前端选择器动态切换：
+`lib/models.ts` 统一接口，通过环境变量 + 前端选择器动态切换。用户选择的模型存入 `localStorage`，每次请求从前端携带 `model` 参数传给 API。
 
 ```typescript
 // Qwen 通过 OpenAI 兼容接口接入
@@ -277,9 +281,9 @@ value: Array<{
 
 | 来源 | 处理方式 |
 |------|----------|
-| `.md` / `.mdx` | 直接解析，保留原有 frontmatter，补充缺失字段 |
-| Notion Export `.zip` | 解压 → 转换 Notion 格式 → 重建 frontmatter |
-| Obsidian Vault | 解析双链 `[[...]]` → 转为标签，保留目录结构 |
+| `.md` / `.mdx` | 直接上传单个或多个文件，保留原有 frontmatter，补充缺失字段 |
+| Notion Export `.zip` | 上传 Notion 导出的 `.zip` 包，解压 → 转换格式 → 重建 frontmatter |
+| Obsidian Vault `.zip` | 将 Obsidian 仓库打包成 `.zip` 上传，解析双链 `[[...]]` → 转为标签，保留目录结构 |
 
 导入后自动触发 `rebuild_index()` 更新记忆库。
 
