@@ -53,7 +53,7 @@ export async function checkMemory(
   const lowerQuery = query.toLowerCase()
   for (const item of index) {
     const keywordMatch = item.keywords.some(
-      (k) => lowerQuery.includes(k.toLowerCase()) || k.toLowerCase().includes(lowerQuery)
+      (k) => lowerQuery.includes(k.toLowerCase())
     )
     const titleMatch = item.title.toLowerCase().includes(lowerQuery)
     if (keywordMatch || titleMatch) {
@@ -71,7 +71,8 @@ export async function checkMemory(
   })
 
   const parts = text.trim().split(',')
-  const idx = parseInt(parts[0])
+  if (parts.length < 2) return null
+  const idx = parseInt(parts[0], 10)
   const score = parseFloat(parts[1])
 
   if (idx >= 0 && score > 0.85 && index[idx]) {

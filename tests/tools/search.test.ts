@@ -20,7 +20,10 @@ vi.mock('fs', () => ({
 
 import { searchWeb, saveArticle } from '@/lib/tools/search'
 
-beforeEach(() => vi.clearAllMocks())
+beforeEach(() => {
+  vi.clearAllMocks()
+  process.env.TAVILY_API_KEY = 'test-key'
+})
 
 describe('search tools', () => {
   it('searchWeb returns results array', async () => {
@@ -53,7 +56,6 @@ describe('search tools', () => {
       keywords: [],
       summary: 'ts',
     })
-    expect(slug).toMatch(/^[a-z0-9-]+$/)
-    expect(slug).toContain('typescript')
+    expect(slug).toBe('typescript-advanced')
   })
 })

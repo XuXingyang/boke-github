@@ -1,24 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-vi.mock('@vercel/kv', () => {
-  const store = new Map<string, unknown>()
-  return {
-    kv: {
-      get: vi.fn((k: string) => Promise.resolve(store.get(k) ?? null)),
-      set: vi.fn((k: string, v: unknown) => { store.set(k, v); return Promise.resolve() }),
-    },
-  }
-})
+// Module-level store — vi.mock factory closes over this reference
+const store = new Map<string, unknown>()
+
+vi.mock('@vercel/kv', () => ({
+  kv: {
+    get: vi.fn((k: string) => Promise.resolve(store.get(k) ?? null)),
+    set: vi.fn((k: string, v: unknown) => { store.set(k, v); return Promise.resolve('OK' as any) }),
+  },
+}))
 
 vi.mock('@/lib/models', () => ({
   getModel: vi.fn(() => ({})),
 }))
 
 vi.mock('ai', () => ({
-  generateText: vi.fn().mockResolvedValue({ text: '0.3' }),
+  generateText: vi.fn().mockResolvedValue({ text: '-1,0' }),
 }))
 
 import { checkMemory, updateMemory, rebuildIndex } from '@/lib/tools/memory'
+import { generateText } from 'ai'
 import type { ArticleMeta } from '@/types'
 
 const sampleArticle: ArticleMeta = {
@@ -32,36 +33,62 @@ const sampleArticle: ArticleMeta = {
   read_time: 10,
 }
 
-let store: Map<string, unknown>
-
 beforeEach(() => {
-  store = new Map()
-  vi.clearAllMocks()
+  store.clear()        // mutate the same Map the closure holds
+  vi.clearAllMocks()   // only clears call counts, not implementations
 })
 
 describe('memory tools', () => {
   it('updateMemory stores article in index', async () => {
     const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockImplementation((k: string) =>
-      Promise.resolve((store.get(k) as any) ?? null)
-    )
-    vi.mocked(kv.set).mockImplementation((k: string, v: unknown) => {
-      store.set(k, v)
-      return Promise.resolve('OK' as any)
-    })
     await updateMemory(sampleArticle)
     expect(kv.set).toHaveBeenCalledWith(
       'memory:index',
-      expect.arrayContaining([
-        expect.objectContaining({ slug: 'react-19' }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ slug: 'react-19' })])
     )
   })
 
-  it('checkMemory returns null when index is empty', async () => {
+  it('updateMemory is idempotent for the same slug', async () => {
     const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockResolvedValueOnce([])
+    await updateMemory(sampleArticle)
+    await updateMemory({ ...sampleArticle, summary: 'updated summary' })
+    const lastCall = vi.mocked(kv.set).mock.calls.at(-1)!
+    const index = lastCall[1] as any[]
+    expect(index.filter((i: any) => i.slug === 'react-19').length).toBe(1)
+    expect(index[0].summary).toBe('updated summary')
+  })
+
+  it('checkMemory returns null when index is empty', async () => {
     const result = await checkMemory('React hooks')
+    expect(result).toBeNull()
+  })
+
+  it('checkMemory hits on keyword match', async () => {
+    await updateMemory(sampleArticle)
+    const result = await checkMemory('Actions')
+    expect(result).not.toBeNull()
+    expect(result?.slug).toBe('react-19')
+  })
+
+  it('checkMemory hits on title match', async () => {
+    await updateMemory(sampleArticle)
+    const result = await checkMemory('react 19')
+    expect(result).not.toBeNull()
+    expect(result?.found).toBe(true)
+  })
+
+  it('checkMemory hits via semantic similarity when score > 0.85', async () => {
+    await updateMemory(sampleArticle)
+    vi.mocked(generateText).mockResolvedValueOnce({ text: '0,0.92' } as any)
+    const result = await checkMemory('concurrent rendering improvements')
+    expect(result).not.toBeNull()
+    expect(result?.slug).toBe('react-19')
+  })
+
+  it('checkMemory returns null when semantic score is low', async () => {
+    await updateMemory(sampleArticle)
+    vi.mocked(generateText).mockResolvedValueOnce({ text: '0,0.50' } as any)
+    const result = await checkMemory('completely unrelated query')
     expect(result).toBeNull()
   })
 
