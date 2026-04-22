@@ -5,12 +5,10 @@ import type { ModelId } from '@/types'
 const qwen = createOpenAI({
   baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
   apiKey: process.env.DASHSCOPE_API_KEY ?? '',
-  compatibility: 'compatible',
 })
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY ?? '',
-  compatibility: 'compatible',
 })
 
 export const AVAILABLE_MODELS = [
@@ -22,11 +20,11 @@ export const AVAILABLE_MODELS = [
 export function getModel(id: ModelId) {
   switch (id) {
     case 'gpt-4o':
-      return openai('gpt-4o')
+      return openai.chat('gpt-4o')
     case 'claude-sonnet':
       return anthropic('claude-sonnet-4-6')
     case 'qwen-max':
     default:
-      return qwen('qwen-max')
+      return qwen.chat('qwen-max')
   }
 }
