@@ -8,7 +8,7 @@ interface ArticleCardProps {
 
 const TAG_COLORS: Record<string, string> = {
   TypeScript: 'text-blue-accent bg-blue-accent/10',
-  React: 'text-orange-400 bg-orange-400/10',
+  React: 'text-orange-accent bg-orange-accent/10',
   Rust: 'text-yellow-accent bg-yellow-accent/10',
   'Next.js': 'text-purple bg-purple/10',
 }

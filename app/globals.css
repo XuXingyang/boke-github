@@ -4,6 +4,7 @@
   --color-bg-primary: #0d1117;
   --color-bg-secondary: #161b22;
   --color-bg-tertiary: #21262d;
+  --color-border: #30363d;
   --color-border-default: #30363d;
   --color-purple: #a78bfa;
   --color-purple-dark: #7c3aed;
@@ -12,7 +13,7 @@
   --color-text-primary: #e6edf3;
   --color-text-secondary: #c9d1d9;
   --color-text-muted: #8b949e;
-  --color-green-accent: #34d399;
+  --color-orange-accent: #f97316;
   --color-yellow-accent: #fbbf24;
   --color-border-purple: rgba(139, 92, 246, 0.3);
   --color-border-purple-glow: rgba(139, 92, 246, 0.6);
@@ -32,7 +33,9 @@
 
 @layer utilities {
   .bg-gradient-nav {
-    background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), rgba(96, 165, 250, 0.06));
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--color-purple) 10%, transparent),
+      color-mix(in srgb, var(--color-blue-accent) 6%, transparent));
   }
   .gradient-text {
     background: linear-gradient(90deg, var(--color-purple), var(--color-blue-accent));
@@ -45,6 +48,6 @@
   }
   .border-glow {
     border-color: var(--color-border-purple-glow);
-    box-shadow: 0 0 8px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-purple) 15%, transparent);
   }
 }
