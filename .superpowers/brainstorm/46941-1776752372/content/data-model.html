@@ -1,0 +1,141 @@
+<h2>数据模型设计</h2>
+<p class="subtitle">三个数据域：文章 / 学习记录 / 记忆库</p>
+
+<div style="max-width:860px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+  <!-- Article Frontmatter -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:10px;color:#8b949e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">① 文章 — Markdown Frontmatter（/content/*.md）</div>
+    <div style="background:#161b22;border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:16px;">
+      <div style="display:flex;gap:14px;">
+        <div style="flex:1;background:#0d1117;border-radius:6px;padding:12px;font-family:monospace;font-size:10px;line-height:1.9;">
+          <span style="color:#8b949e;">---</span><br>
+          <span style="color:#79c0ff;">title</span><span style="color:#c9d1d9;">: </span><span style="color:#a5d6ff;">"React 19 新特性详解"</span><br>
+          <span style="color:#79c0ff;">slug</span><span style="color:#c9d1d9;">: </span><span style="color:#a5d6ff;">react-19-features</span><br>
+          <span style="color:#79c0ff;">date</span><span style="color:#c9d1d9;">: </span><span style="color:#a5d6ff;">2026-04-18</span><br>
+          <span style="color:#79c0ff;">tags</span><span style="color:#c9d1d9;">: [React, Frontend]</span><br>
+          <span style="color:#79c0ff;">keywords</span><span style="color:#c9d1d9;">: [并发, Actions, use()]</span><br>
+          <span style="color:#79c0ff;">summary</span><span style="color:#c9d1d9;">: </span><span style="color:#a5d6ff;">"一句话摘要..."</span><br>
+          <span style="color:#79c0ff;">source</span><span style="color:#c9d1d9;">: </span><span style="color:#a5d6ff;">agent_search</span> <span style="color:#8b949e;"># manual/agent_search/import</span><br>
+          <span style="color:#79c0ff;">read_time</span><span style="color:#c9d1d9;">: 8</span> <span style="color:#8b949e;"># 分钟</span><br>
+          <span style="color:#8b949e;">---</span>
+        </div>
+        <div style="width:200px;display:flex;flex-direction:column;gap:8px;justify-content:center;">
+          <div style="background:#0d1117;border-radius:6px;padding:10px;">
+            <div style="font-size:9px;color:#8b949e;margin-bottom:4px;">source 字段含义</div>
+            <div style="font-size:9px;color:#c9d1d9;line-height:1.8;">
+              <span style="color:#a78bfa;">manual</span> — 手写<br>
+              <span style="color:#f472b6;">agent_search</span> — Agent生成<br>
+              <span style="color:#fbbf24;">import</span> — 导入
+            </div>
+          </div>
+          <div style="background:#0d1117;border-radius:6px;padding:10px;">
+            <div style="font-size:9px;color:#8b949e;margin-bottom:4px;">存储位置</div>
+            <div style="font-family:monospace;font-size:9px;color:#34d399;">/content/<br>  ├── react/<br>  ├── typescript/<br>  └── notes/</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vercel KV schemas -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:10px;color:#8b949e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">② 学习记录 — Vercel KV</div>
+    <div style="background:#161b22;border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:16px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+        <div style="flex:1;min-width:180px;background:#0d1117;border-radius:6px;padding:12px;">
+          <div style="font-size:10px;color:#34d399;font-weight:600;margin-bottom:8px;">打卡记录</div>
+          <div style="font-family:monospace;font-size:9px;color:#8b949e;line-height:1.9;">
+            <span style="color:#a5d6ff;">"checkin:2026-04-18"</span><br>
+            {<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">checked</span>: <span style="color:#79c0ff;">true</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">study_seconds</span>: <span style="color:#f8c555;">11520</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">articles_read</span>: [<span style="color:#a5d6ff;">"react-19"</span>]<br>
+            }
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:180px;background:#0d1117;border-radius:6px;padding:12px;">
+          <div style="font-size:10px;color:#34d399;font-weight:600;margin-bottom:8px;">Streak 状态</div>
+          <div style="font-family:monospace;font-size:9px;color:#8b949e;line-height:1.9;">
+            <span style="color:#a5d6ff;">"streak:current"</span><br>
+            {<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">count</span>: <span style="color:#f8c555;">7</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">last_date</span>: <span style="color:#a5d6ff;">"2026-04-18"</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">longest</span>: <span style="color:#f8c555;">21</span><br>
+            }
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:180px;background:#0d1117;border-radius:6px;padding:12px;">
+          <div style="font-size:10px;color:#34d399;font-weight:600;margin-bottom:8px;">文章进度</div>
+          <div style="font-family:monospace;font-size:9px;color:#8b949e;line-height:1.9;">
+            <span style="color:#a5d6ff;">"article:react-19"</span><br>
+            {<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">completed</span>: <span style="color:#79c0ff;">true</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">progress</span>: <span style="color:#f8c555;">100</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">date</span>: <span style="color:#a5d6ff;">"2026-04-18"</span><br>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Memory Store -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:10px;color:#8b949e;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">③ 记忆库 — Vercel KV</div>
+    <div style="background:#161b22;border:1px solid rgba(251,191,36,0.25);border-radius:10px;padding:16px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+        <div style="flex:1;min-width:180px;background:#0d1117;border-radius:6px;padding:12px;">
+          <div style="font-size:10px;color:#fbbf24;font-weight:600;margin-bottom:8px;">搜索历史</div>
+          <div style="font-family:monospace;font-size:9px;color:#8b949e;line-height:1.9;">
+            <span style="color:#a5d6ff;">"memory:search"</span><br>
+            [{<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">query</span>: <span style="color:#a5d6ff;">"React 19"</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">article_slug</span>: <span style="color:#a5d6ff;">"react-19"</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">at</span>: <span style="color:#f8c555;">1776752372</span><br>
+            }]
+          </div>
+        </div>
+
+        <div style="flex:2;min-width:240px;background:#0d1117;border-radius:6px;padding:12px;">
+          <div style="font-size:10px;color:#fbbf24;font-weight:600;margin-bottom:8px;">文章索引（去重用）</div>
+          <div style="font-family:monospace;font-size:9px;color:#8b949e;line-height:1.9;">
+            <span style="color:#a5d6ff;">"memory:index"</span><br>
+            [{<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">slug</span>: <span style="color:#a5d6ff;">"react-19"</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">title</span>: <span style="color:#a5d6ff;">"React 19 新特性详解"</span>,<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">keywords</span>: [<span style="color:#a5d6ff;">"React","并发","Actions"</span>],<br>
+            &nbsp;&nbsp;<span style="color:#79c0ff;">summary</span>: <span style="color:#a5d6ff;">"一句话摘要..."</span><br>
+            }]
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center;margin-top:20px;">
+  <div class="options" style="justify-content:center;max-width:500px;margin:0 auto;">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>数据模型确认</h3>
+        <p>进入下一部分：前端页面布局</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">↻</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里需要改</p>
+      </div>
+    </div>
+  </div>
+</div>

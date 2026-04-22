@@ -1,0 +1,318 @@
+<h2>前端页面布局</h2>
+<p class="subtitle">5 个主要页面 · 点击查看每个页面的线框图</p>
+
+<div style="max-width:900px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+  <!-- Page tabs -->
+  <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;" id="pageTabs">
+    <button onclick="showPage('home')" id="tab-home" style="background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.5);color:#a78bfa;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;">🏠 首页 / 仪表盘</button>
+    <button onclick="showPage('article')" id="tab-article" style="background:#161b22;border:1px solid #30363d;color:#8b949e;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;">📄 文章详情</button>
+    <button onclick="showPage('agent')" id="tab-agent" style="background:#161b22;border:1px solid #30363d;color:#8b949e;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;">🤖 Agent 面板</button>
+    <button onclick="showPage('checkin')" id="tab-checkin" style="background:#161b22;border:1px solid #30363d;color:#8b949e;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;">✅ 打卡 / 统计</button>
+    <button onclick="showPage('import')" id="tab-import" style="background:#161b22;border:1px solid #30363d;color:#8b949e;border-radius:6px;padding:6px 14px;font-size:11px;cursor:pointer;">📥 导入工具</button>
+  </div>
+
+  <!-- Home Page -->
+  <div id="page-home" style="display:block;">
+    <div style="background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:10px;overflow:hidden;">
+      <!-- Nav -->
+      <div style="background:#0d1117;border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:700;font-size:14px;background:linear-gradient(90deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚡ Dev·Notes</div>
+        <div style="display:flex;gap:16px;font-size:11px;color:#8b949e;">
+          <span style="color:#a78bfa;">首页</span><span>Agent</span><span>打卡</span><span>导入</span>
+        </div>
+      </div>
+      <!-- Stats bar -->
+      <div style="background:linear-gradient(90deg,rgba(139,92,246,0.1),rgba(96,165,250,0.06));border-bottom:1px solid rgba(139,92,246,0.12);padding:10px 20px;display:flex;gap:20px;align-items:center;">
+        <div style="display:flex;align-items:center;gap:6px;"><span>🔥</span><div><div style="font-size:14px;font-weight:700;color:#fbbf24;">7</div><div style="font-size:9px;color:#8b949e;">连续天</div></div></div>
+        <div style="width:1px;height:24px;background:rgba(139,92,246,0.2);"></div>
+        <div style="display:flex;align-items:center;gap:6px;"><span>⏱</span><div><div style="font-size:14px;font-weight:700;color:#34d399;">3.2h</div><div style="font-size:9px;color:#8b949e;">今日</div></div></div>
+        <div style="width:1px;height:24px;background:rgba(139,92,246,0.2);"></div>
+        <div style="display:flex;align-items:center;gap:6px;"><span>✅</span><div><div style="font-size:14px;font-weight:700;color:#a78bfa;">12</div><div style="font-size:9px;color:#8b949e;">已学</div></div></div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#8b949e;">本月</span>
+          <div style="width:80px;height:5px;background:#21262d;border-radius:3px;"><div style="width:58%;height:100%;background:linear-gradient(90deg,#7c3aed,#2563eb);border-radius:3px;"></div></div>
+          <span style="font-size:10px;color:#a78bfa;">58%</span>
+        </div>
+      </div>
+      <!-- Content + Sidebar -->
+      <div style="display:flex;min-height:340px;">
+        <div style="flex:1;padding:16px 20px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-size:10px;color:#8b949e;text-transform:uppercase;letter-spacing:0.1em;">最新文章</div>
+            <div style="display:flex;gap:6px;">
+              <span style="background:#21262d;border-radius:4px;padding:2px 8px;font-size:9px;color:#8b949e;cursor:pointer;">全部</span>
+              <span style="background:rgba(139,92,246,0.15);border-radius:4px;padding:2px 8px;font-size:9px;color:#a78bfa;cursor:pointer;">未学习</span>
+            </div>
+          </div>
+          <!-- Article items -->
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="background:#161b22;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                <div style="font-size:12px;color:#e6edf3;font-weight:600;">TypeScript 类型体操进阶</div>
+                <div style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);border-radius:3px;padding:1px 6px;font-size:9px;color:#34d399;">✓ 已打卡</div>
+              </div>
+              <div style="font-size:10px;color:#8b949e;margin-bottom:6px;">2026-04-18 · 12 min · <span style="color:#58a6ff;">TypeScript</span></div>
+              <div style="height:2px;background:#21262d;border-radius:1px;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#7c3aed,#2563eb);border-radius:1px;"></div></div>
+            </div>
+            <div style="background:#161b22;border:1px solid #30363d;border-radius:7px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                <div style="font-size:12px;color:#e6edf3;font-weight:600;">React 18 并发渲染原理</div>
+                <div style="background:#21262d;border:1px solid #30363d;border-radius:3px;padding:1px 6px;font-size:9px;color:#8b949e;">未打卡</div>
+              </div>
+              <div style="font-size:10px;color:#8b949e;margin-bottom:6px;">2026-04-15 · 8 min · <span style="color:#f78166;">React</span></div>
+              <div style="height:2px;background:#21262d;border-radius:1px;"><div style="width:55%;height:100%;background:linear-gradient(90deg,#7c3aed,#2563eb);opacity:0.5;border-radius:1px;"></div></div>
+            </div>
+            <div style="background:#161b22;border:1px solid #30363d;border-radius:7px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                <div style="font-size:12px;color:#e6edf3;font-weight:600;">Rust 所有权系统深度解析</div>
+                <div style="background:#21262d;border:1px solid #30363d;border-radius:3px;padding:1px 6px;font-size:9px;color:#8b949e;">未打卡</div>
+              </div>
+              <div style="font-size:10px;color:#8b949e;margin-bottom:6px;">2026-04-12 · 15 min · <span style="color:#e3b341;">Rust</span></div>
+              <div style="height:2px;background:#21262d;border-radius:1px;"><div style="width:25%;height:100%;background:linear-gradient(90deg,#7c3aed,#2563eb);opacity:0.3;border-radius:1px;"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar -->
+        <div style="width:220px;border-left:1px solid rgba(139,92,246,0.12);padding:16px;background:rgba(139,92,246,0.02);">
+          <div style="font-size:10px;color:#8b949e;text-transform:uppercase;margin-bottom:10px;">Agent 快捷入口</div>
+          <div style="background:#161b22;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:10px;margin-bottom:10px;">
+            <div style="font-size:10px;color:#a78bfa;margin-bottom:6px;">● Qwen-Max</div>
+            <div style="background:#0d1117;border-radius:5px;padding:7px;font-size:10px;color:#8b949e;font-family:monospace;margin-bottom:6px;">帮我整理今天的笔记...</div>
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;background:#21262d;border-radius:4px;padding:3px;text-align:center;font-size:9px;color:#8b949e;cursor:pointer;">搜索</div>
+              <div style="flex:1;background:#21262d;border-radius:4px;padding:3px;text-align:center;font-size:9px;color:#8b949e;cursor:pointer;">整理</div>
+              <div style="flex:1;background:#21262d;border-radius:4px;padding:3px;text-align:center;font-size:9px;color:#8b949e;cursor:pointer;">推荐</div>
+            </div>
+          </div>
+          <div style="font-size:10px;color:#8b949e;text-transform:uppercase;margin-bottom:8px;">标签</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="background:rgba(88,166,255,0.1);color:#58a6ff;border-radius:4px;padding:2px 8px;font-size:9px;">TypeScript</span>
+            <span style="background:rgba(247,129,102,0.1);color:#f78166;border-radius:4px;padding:2px 8px;font-size:9px;">React</span>
+            <span style="background:rgba(227,179,65,0.1);color:#e3b341;border-radius:4px;padding:2px 8px;font-size:9px;">Rust</span>
+            <span style="background:rgba(139,92,246,0.1);color:#a78bfa;border-radius:4px;padding:2px 8px;font-size:9px;">Next.js</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Page -->
+  <div id="page-article" style="display:none;">
+    <div style="background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:10px;overflow:hidden;">
+      <div style="background:#0d1117;border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:700;font-size:14px;background:linear-gradient(90deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚡ Dev·Notes</div>
+        <div style="font-size:10px;color:#8b949e;">← 返回列表</div>
+      </div>
+      <!-- Reading progress bar -->
+      <div style="height:3px;background:#21262d;"><div style="width:45%;height:100%;background:linear-gradient(90deg,#7c3aed,#2563eb);"></div></div>
+      <div style="display:flex;min-height:380px;">
+        <div style="flex:1;padding:24px 32px;max-width:680px;">
+          <div style="display:flex;gap:6px;margin-bottom:12px;">
+            <span style="background:rgba(88,166,255,0.1);color:#58a6ff;border-radius:4px;padding:2px 8px;font-size:10px;">TypeScript</span>
+            <span style="background:#21262d;color:#8b949e;border-radius:4px;padding:2px 8px;font-size:10px;">12 min read</span>
+          </div>
+          <div style="font-size:20px;font-weight:700;color:#e6edf3;margin-bottom:8px;">TypeScript 类型体操进阶</div>
+          <div style="font-size:11px;color:#8b949e;margin-bottom:20px;">2026-04-18 · Agent 生成</div>
+          <div style="font-size:12px;color:#c9d1d9;line-height:2;margin-bottom:16px;">
+            类型系统是 TypeScript 的核心能力。掌握高级类型操作，能让你写出更安全、更具表达力的代码...
+          </div>
+          <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px;font-family:monospace;font-size:11px;color:#e6edf3;line-height:1.8;margin-bottom:16px;">
+            <span style="color:#ff7b72;">type</span> <span style="color:#79c0ff;">DeepReadonly</span>&lt;T&gt; = {<br>
+            &nbsp;&nbsp;<span style="color:#ff7b72;">readonly</span> [K <span style="color:#ff7b72;">in</span> <span style="color:#ff7b72;">keyof</span> T]: T[K] <span style="color:#ff7b72;">extends</span> <span style="color:#79c0ff;">object</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;? <span style="color:#79c0ff;">DeepReadonly</span>&lt;T[K]&gt; : T[K]<br>
+            }
+          </div>
+          <!-- Check-in button -->
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button style="background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;border-radius:8px;padding:10px 20px;color:white;font-size:12px;font-weight:600;cursor:pointer;">✅ 标记已学习</button>
+            <div style="font-size:10px;color:#8b949e;">阅读进度 45%</div>
+          </div>
+        </div>
+        <!-- TOC sidebar -->
+        <div style="width:180px;border-left:1px solid rgba(139,92,246,0.12);padding:16px;">
+          <div style="font-size:10px;color:#8b949e;text-transform:uppercase;margin-bottom:10px;">目录</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:10px;color:#a78bfa;cursor:pointer;">介绍</div>
+            <div style="font-size:10px;color:#8b949e;padding-left:8px;cursor:pointer;">条件类型</div>
+            <div style="font-size:10px;color:#8b949e;padding-left:8px;cursor:pointer;">映射类型</div>
+            <div style="font-size:10px;color:#8b949e;padding-left:8px;cursor:pointer;">infer 关键字</div>
+            <div style="font-size:10px;color:#8b949e;cursor:pointer;">实战案例</div>
+            <div style="font-size:10px;color:#8b949e;cursor:pointer;">总结</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agent Page -->
+  <div id="page-agent" style="display:none;">
+    <div style="background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:10px;overflow:hidden;min-height:420px;display:flex;flex-direction:column;">
+      <div style="background:#0d1117;border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:13px;font-weight:600;color:#a78bfa;">🤖 AI Agent</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:#8b949e;">模型：</span>
+          <select style="background:#161b22;border:1px solid rgba(139,92,246,0.3);color:#a78bfa;border-radius:4px;padding:2px 8px;font-size:10px;">
+            <option>Qwen-Max</option>
+            <option>GPT-4o</option>
+            <option>Claude Sonnet</option>
+          </select>
+        </div>
+      </div>
+      <!-- Chat history -->
+      <div style="flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:10px;overflow:auto;">
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);border-radius:8px;padding:8px 12px;max-width:60%;font-size:11px;color:#c9d1d9;">帮我搜索 React 19 的新特性并整理成笔记</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="width:24px;height:24px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🤖</div>
+          <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:8px 12px;max-width:75%;font-size:11px;color:#c9d1d9;line-height:1.7;">
+            <div style="color:#fbbf24;font-size:10px;margin-bottom:4px;">🧠 检查记忆库...</div>
+            <div style="color:#8b949e;font-size:10px;margin-bottom:8px;">未找到相关已有文章，开始搜索</div>
+            <div style="color:#f472b6;font-size:10px;margin-bottom-4px;">🔍 搜索 Agent 调用中...</div>
+            已找到 5 篇相关资料，正在整理 <span style="color:#a78bfa;animation:blink 1s infinite;">▌</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="width:24px;height:24px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">🤖</div>
+          <div style="background:#161b22;border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;max-width:75%;font-size:11px;color:#c9d1d9;line-height:1.7;">
+            ✅ 已生成文章并保存到 <span style="color:#34d399;font-family:monospace;">/content/react/react-19.md</span><br>
+            <span style="color:#8b949e;font-size:10px;">记忆库已更新，下次询问 React 19 相关内容将直接返回此文章</span>
+          </div>
+        </div>
+      </div>
+      <!-- Quick actions -->
+      <div style="border-top:1px solid rgba(139,92,246,0.12);padding:10px 20px;display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:5px;padding:4px 10px;font-size:10px;color:#8b949e;cursor:pointer;">🔍 搜索网页</div>
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:5px;padding:4px 10px;font-size:10px;color:#8b949e;cursor:pointer;">📂 整理文章</div>
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:5px;padding:4px 10px;font-size:10px;color:#8b949e;cursor:pointer;">💡 推荐今日学习</div>
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:5px;padding:4px 10px;font-size:10px;color:#8b949e;cursor:pointer;">📊 学习总结</div>
+      </div>
+      <!-- Input -->
+      <div style="border-top:1px solid rgba(139,92,246,0.12);padding:12px 20px;display:flex;gap:8px;">
+        <div style="flex:1;background:#161b22;border:1px solid rgba(139,92,246,0.25);border-radius:8px;padding:8px 12px;font-size:11px;color:#8b949e;">输入你的需求...</div>
+        <button style="background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;border-radius:8px;padding:8px 16px;color:white;font-size:11px;cursor:pointer;">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkin Page -->
+  <div id="page-checkin" style="display:none;">
+    <div style="background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:10px;overflow:hidden;">
+      <div style="background:#0d1117;border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 20px;">
+        <div style="font-size:13px;font-weight:600;color:#34d399;">✅ 学习打卡</div>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
+        <!-- Today check-in -->
+        <div style="background:linear-gradient(135deg,rgba(52,211,153,0.08),rgba(139,92,246,0.06));border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#e6edf3;margin-bottom:4px;">今日打卡</div>
+            <div style="font-size:11px;color:#8b949e;">2026年4月18日 · 已学习 3.2 小时</div>
+          </div>
+          <button style="background:linear-gradient(135deg,#059669,#0d9488);border:none;border-radius:8px;padding:10px 20px;color:white;font-size:12px;font-weight:600;cursor:pointer;">🔥 已打卡</button>
+        </div>
+        <!-- Streak + stats -->
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;background:#161b22;border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:14px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#fbbf24;">7</div>
+            <div style="font-size:10px;color:#8b949e;margin-top:2px;">当前连续天数 🔥</div>
+            <div style="font-size:9px;color:#4b5563;margin-top:4px;">历史最长 21 天</div>
+          </div>
+          <div style="flex:1;background:#161b22;border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:14px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#34d399;">48h</div>
+            <div style="font-size:10px;color:#8b949e;margin-top:2px;">本月学习时长</div>
+            <div style="font-size:9px;color:#4b5563;margin-top:4px;">日均 3.2 小时</div>
+          </div>
+          <div style="flex:1;background:#161b22;border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:14px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#a78bfa;">12</div>
+            <div style="font-size:10px;color:#8b949e;margin-top:2px;">已完成文章</div>
+            <div style="font-size:9px;color:#4b5563;margin-top:4px;">共 21 篇</div>
+          </div>
+        </div>
+        <!-- Calendar heatmap -->
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;">
+          <div style="font-size:10px;color:#8b949e;text-transform:uppercase;margin-bottom:10px;">本月打卡日历</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            ${Array.from({length:30}, (_,i) => {
+              const levels = [0,0,1,1,2,2,3,3,2,1,0,2,3,3,2,1,1,2,3,3,3,2,1,0,1,2,3,3,2,1];
+              const colors = ['#21262d','rgba(52,211,153,0.2)','rgba(52,211,153,0.4)','rgba(52,211,153,0.8)'];
+              return `<div style="width:20px;height:20px;border-radius:3px;background:${colors[levels[i]]};display:flex;align-items:center;justify-content:center;font-size:8px;color:#8b949e;">${i+1}</div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Page -->
+  <div id="page-import" style="display:none;">
+    <div style="background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:10px;overflow:hidden;">
+      <div style="background:#0d1117;border-bottom:1px solid rgba(139,92,246,0.2);padding:10px 20px;">
+        <div style="font-size:13px;font-weight:600;color:#fbbf24;">📥 导入工具</div>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:14px;">
+        <!-- Upload area -->
+        <div style="border:2px dashed rgba(139,92,246,0.3);border-radius:10px;padding:32px;text-align:center;background:rgba(139,92,246,0.02);cursor:pointer;" onmouseenter="this.style.borderColor='rgba(139,92,246,0.6)'" onmouseleave="this.style.borderColor='rgba(139,92,246,0.3)'">
+          <div style="font-size:28px;margin-bottom:8px;">📁</div>
+          <div style="font-size:13px;color:#c9d1d9;font-weight:600;margin-bottom:4px;">拖拽文件到这里，或点击选择</div>
+          <div style="font-size:11px;color:#8b949e;">支持 .md · .mdx · Notion Export (.zip) · Obsidian Vault</div>
+        </div>
+        <!-- Import options -->
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;background:#161b22;border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:12px;">
+            <div style="font-size:11px;color:#a78bfa;font-weight:600;margin-bottom:6px;">📝 Markdown / MDX</div>
+            <div style="font-size:10px;color:#8b949e;line-height:1.7;">直接上传单个或多个 .md 文件，自动解析 frontmatter，保留原有标签</div>
+          </div>
+          <div style="flex:1;background:#161b22;border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:12px;">
+            <div style="font-size:11px;color:#fbbf24;font-weight:600;margin-bottom:6px;">🗒 Notion Export</div>
+            <div style="font-size:10px;color:#8b949e;line-height:1.7;">上传 Notion 导出的 .zip 包，自动转换格式并重建目录结构</div>
+          </div>
+          <div style="flex:1;background:#161b22;border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:12px;">
+            <div style="font-size:11px;color:#34d399;font-weight:600;margin-bottom:6px;">🔮 Obsidian Vault</div>
+            <div style="font-size:10px;color:#8b949e;line-height:1.7;">上传 Obsidian 仓库文件夹，保留双链关系，转为标签系统</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPage(name) {
+  ['home','article','agent','checkin','import'].forEach(p => {
+    document.getElementById('page-'+p).style.display = p===name ? 'block' : 'none';
+    const tab = document.getElementById('tab-'+p);
+    if(tab) {
+      if(p===name) {
+        tab.style.background='rgba(139,92,246,0.2)';
+        tab.style.borderColor='rgba(139,92,246,0.5)';
+        tab.style.color='#a78bfa';
+      } else {
+        tab.style.background='#161b22';
+        tab.style.borderColor='#30363d';
+        tab.style.color='#8b949e';
+      }
+    }
+  });
+}
+</script>
+
+<div style="text-align:center;margin-top:20px;">
+  <div class="options" style="justify-content:center;max-width:500px;margin:0 auto;">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>页面布局确认</h3>
+        <p>设计全部确认，开始写设计文档</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">↻</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里需要改</p>
+      </div>
+    </div>
+  </div>
+</div>

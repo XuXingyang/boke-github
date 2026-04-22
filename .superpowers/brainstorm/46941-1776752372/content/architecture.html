@@ -1,0 +1,149 @@
+<h2>系统架构设计</h2>
+<p class="subtitle">Next.js 15 + Vercel AI SDK + 多 Agent 架构</p>
+
+<div style="max-width:860px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+  <!-- Layer 1: Frontend -->
+  <div style="margin-bottom:12px;">
+    <div style="font-size:10px;color:#8b949e;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;padding-left:4px;">① 前端层 — Next.js 15 App Router</div>
+    <div style="background:#161b22;border:1px solid rgba(139,92,246,0.35);border-radius:10px;padding:14px;display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#a78bfa;margin-bottom:6px;">📄 博客文章页</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;">文章列表 / 详情<br>标签分类 / 搜索<br>MDX 渲染</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#60a5fa;margin-bottom:6px;">🤖 Agent 面板</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;">对话界面<br>流式输出<br>模型切换器</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#34d399;margin-bottom:6px;">✅ 学习打卡页</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;">每日 Streak<br>文章打卡<br>时长统计</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(139,92,246,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#fbbf24;margin-bottom:6px;">📥 导入工具</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;">上传 Markdown<br>Notion Export<br>Obsidian Vault</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow -->
+  <div style="text-align:center;color:#4b5563;font-size:18px;margin:4px 0;">↕</div>
+
+  <!-- Layer 2: API Routes -->
+  <div style="margin-bottom:12px;">
+    <div style="font-size:10px;color:#8b949e;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;padding-left:4px;">② API 层 — Next.js Route Handlers (Streaming)</div>
+    <div style="background:#161b22;border:1px solid rgba(96,165,250,0.35);border-radius:10px;padding:14px;display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:2;min-width:180px;background:#0d1117;border:1px solid rgba(96,165,250,0.25);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#60a5fa;margin-bottom:6px;">🎯 Orchestrator Agent</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;font-family:monospace;">POST /api/agent/chat<br><br></div>
+        <div style="font-size:10px;color:#c9d1d9;line-height:1.6;">接收用户消息 → 判断意图<br>→ 路由到对应子 Agent<br>→ 汇总结果流式返回</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(96,165,250,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#f472b6;margin-bottom:6px;">🔍 搜索 Agent</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;font-family:monospace;">/api/agent/search</div>
+        <div style="font-size:10px;color:#c9d1d9;line-height:1.6;margin-top:4px;">网页搜索<br>内容摘要<br>存为笔记</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(96,165,250,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#fb923c;margin-bottom:6px;">📂 管理 Agent</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;font-family:monospace;">/api/agent/manage</div>
+        <div style="font-size:10px;color:#c9d1d9;line-height:1.6;margin-top:4px;">文件搜索<br>分类整理<br>生成摘要</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:#0d1117;border:1px solid rgba(96,165,250,0.2);border-radius:7px;padding:10px;">
+        <div style="font-size:11px;font-weight:600;color:#34d399;margin-bottom:6px;">📊 打卡 API</div>
+        <div style="font-size:10px;color:#8b949e;line-height:1.6;font-family:monospace;">/api/checkin</div>
+        <div style="font-size:10px;color:#c9d1d9;line-height:1.6;margin-top:4px;">Streak 记录<br>文章标记<br>时长追踪</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow -->
+  <div style="text-align:center;color:#4b5563;font-size:18px;margin:4px 0;">↕</div>
+
+  <!-- Layer 3: Storage + External -->
+  <div style="display:flex;gap:12px;">
+    <!-- Storage -->
+    <div style="flex:1;">
+      <div style="font-size:10px;color:#8b949e;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;padding-left:4px;">③ 存储层</div>
+      <div style="background:#161b22;border:1px solid rgba(52,211,153,0.3);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;background:#0d1117;border-radius:6px;padding:8px 10px;">
+          <span style="font-size:16px;">📁</span>
+          <div>
+            <div style="font-size:11px;color:#34d399;font-weight:600;">/content/*.md</div>
+            <div style="font-size:10px;color:#8b949e;">文章文件 · Git 版本管理</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:#0d1117;border-radius:6px;padding:8px 10px;">
+          <span style="font-size:16px;">🗄️</span>
+          <div>
+            <div style="font-size:11px;color:#34d399;font-weight:600;">Vercel KV</div>
+            <div style="font-size:10px;color:#8b949e;">打卡记录 / Streak / 时长</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- External Services -->
+    <div style="flex:1.5;">
+      <div style="font-size:10px;color:#8b949e;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;padding-left:4px;">④ 外部服务</div>
+      <div style="background:#161b22;border:1px solid rgba(251,191,36,0.3);border-radius:10px;padding:14px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="background:#0d1117;border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:8px 10px;flex:1;min-width:100px;">
+            <div style="font-size:10px;font-weight:600;color:#fbbf24;">🔮 Qwen API</div>
+            <div style="font-size:9px;color:#8b949e;margin-top:3px;">dashscope<br>OpenAI 兼容</div>
+            <div style="margin-top:4px;background:rgba(251,191,36,0.15);border-radius:3px;padding:2px 6px;font-size:9px;color:#fbbf24;display:inline-block;">默认</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid rgba(96,165,250,0.2);border-radius:6px;padding:8px 10px;flex:1;min-width:100px;">
+            <div style="font-size:10px;font-weight:600;color:#60a5fa;">⚡ OpenAI</div>
+            <div style="font-size:9px;color:#8b949e;margin-top:3px;">GPT-4o<br>GPT-4o-mini</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid rgba(167,139,250,0.2);border-radius:6px;padding:8px 10px;flex:1;min-width:100px;">
+            <div style="font-size:10px;font-weight:600;color:#a78bfa;">🧠 Claude</div>
+            <div style="font-size:9px;color:#8b949e;margin-top:3px;">Sonnet 4.6<br>Haiku 4.5</div>
+          </div>
+          <div style="background:#0d1117;border:1px solid rgba(244,114,182,0.2);border-radius:6px;padding:8px 10px;flex:1;min-width:100px;">
+            <div style="font-size:10px;font-weight:600;color:#f472b6;">🔍 Tavily</div>
+            <div style="font-size:9px;color:#8b949e;margin-top:3px;">网页搜索<br>AI 优化</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:20px;max-width:860px;margin-left:auto;margin-right:auto;">
+  <div style="background:#161b22;border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:#8b949e;margin-bottom:8px;">📁 项目目录结构</div>
+    <pre style="font-size:11px;color:#c9d1d9;line-height:1.7;margin:0;font-family:monospace;background:transparent;">boke-github/
+├── app/
+│   ├── (blog)/          ← 博客前端页面
+│   ├── api/agent/       ← Agent API (streaming)
+│   ├── api/checkin/     ← 打卡 API
+│   └── api/import/      ← 导入 API
+├── content/             ← Markdown 文章
+├── lib/
+│   ├── agents/          ← Orchestrator / Search / Manage
+│   ├── models.ts        ← 多模型统一接口
+│   └── checkin.ts       ← 打卡逻辑
+└── components/          ← UI 组件</pre>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:20px;">
+  <div class="options" style="justify-content:center;max-width:500px;margin:0 auto;">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>架构确认</h3>
+        <p>进入详细设计</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">↻</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里需要改</p>
+      </div>
+    </div>
+  </div>
+</div>
