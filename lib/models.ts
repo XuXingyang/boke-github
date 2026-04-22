@@ -5,10 +5,12 @@ import type { ModelId } from '@/types'
 const qwen = createOpenAI({
   baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
   apiKey: process.env.DASHSCOPE_API_KEY ?? '',
+  compatibility: 'compatible',
 })
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY ?? '',
+  compatibility: 'compatible',
 })
 
 export const AVAILABLE_MODELS = [
