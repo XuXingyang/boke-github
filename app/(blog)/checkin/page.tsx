@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { StreakCard } from '@/components/checkin/streak-card'
 import { StatsCard } from '@/components/checkin/stats-card'
 import { HeatmapCalendar } from '@/components/checkin/heatmap-calendar'

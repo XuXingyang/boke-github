@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getAllArticles, getAllTags } from '@/lib/content'
 import { getArticleProgress } from '@/lib/checkin'
 import { ArticleCard } from '@/components/article/article-card'

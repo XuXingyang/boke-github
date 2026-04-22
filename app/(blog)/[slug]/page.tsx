@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { notFound } from 'next/navigation'
 import { serialize } from 'next-mdx-remote/serialize'
 import { getArticle, getArticleSlugs } from '@/lib/content'
