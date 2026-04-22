@@ -11,8 +11,13 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.71",
+    "@ai-sdk/openai": "^3.0.53",
+    "@tavily/core": "^0.7.2",
     "@vercel/kv": "^3.0.0",
+    "ai": "^6.0.168",
     "gray-matter": "^4.0.3",
+    "jszip": "^3.10.1",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
     "next-mdx-remote": "^6.0.0",
