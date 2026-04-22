@@ -29,7 +29,10 @@ export function StreakCard() {
       })
       if (res.ok) {
         setChecked(true)
-        setStreak((s) => ({ ...s, count: s.count + 1 }))
+        setStreak((s) => {
+          const newCount = s.count + 1
+          return { ...s, count: newCount, longest: Math.max(s.longest, newCount) }
+        })
       }
     } finally {
       setLoading(false)
