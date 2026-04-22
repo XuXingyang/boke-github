@@ -17,6 +17,7 @@
     "@vercel/kv": "^3.0.0",
     "ai": "^6.0.168",
     "gray-matter": "^4.0.3",
+    "ioredis": "^5.10.1",
     "jszip": "^3.10.1",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",

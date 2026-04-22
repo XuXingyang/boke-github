@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv'
+import { kv } from '@/lib/kv'
 import { generateText } from 'ai'
 import { getModel } from '@/lib/models'
 import type { ArticleMeta, ModelId } from '@/types'

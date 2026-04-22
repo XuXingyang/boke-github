@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { kv } from '@vercel/kv'
+import { kv } from '@/lib/kv'
 
-vi.mock('@vercel/kv', () => {
+vi.mock('@/lib/kv', () => {
   return {
     kv: {
       get: vi.fn(),

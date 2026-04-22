@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Module-level store — vi.mock factory closes over this reference
 const store = new Map<string, unknown>()
 
-vi.mock('@vercel/kv', () => ({
+vi.mock('@/lib/kv', () => ({
   kv: {
     get: vi.fn((k: string) => Promise.resolve(store.get(k) ?? null)),
     set: vi.fn((k: string, v: unknown) => { store.set(k, v); return Promise.resolve('OK' as any) }),
@@ -40,7 +40,7 @@ beforeEach(() => {
 
 describe('memory tools', () => {
   it('updateMemory stores article in index', async () => {
-    const { kv } = await import('@vercel/kv')
+    const { kv } = await import('@/lib/kv')
     await updateMemory(sampleArticle)
     expect(kv.set).toHaveBeenCalledWith(
       'memory:index',
@@ -49,7 +49,7 @@ describe('memory tools', () => {
   })
 
   it('updateMemory is idempotent for the same slug', async () => {
-    const { kv } = await import('@vercel/kv')
+    const { kv } = await import('@/lib/kv')
     await updateMemory(sampleArticle)
     await updateMemory({ ...sampleArticle, summary: 'updated summary' })
     const lastCall = vi.mocked(kv.set).mock.calls.at(-1)!
@@ -93,7 +93,7 @@ describe('memory tools', () => {
   })
 
   it('rebuildIndex writes full index to KV', async () => {
-    const { kv } = await import('@vercel/kv')
+    const { kv } = await import('@/lib/kv')
     await rebuildIndex([sampleArticle])
     expect(kv.set).toHaveBeenCalledWith(
       'memory:index',

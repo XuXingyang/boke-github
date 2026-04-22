@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv'
+import { kv } from '@/lib/kv'
 import type { CheckinRecord, StreakState, ArticleProgress, DailyStats } from '@/types'
 
 export function getTodayKey(): string {
