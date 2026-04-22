@@ -10,7 +10,7 @@ import type { ModelId } from '@/types'
 export function createOrchestratorStream(message: string, modelId: ModelId = 'qwen-max') {
   return streamText({
     model: getModel(modelId),
-    stopWhen: stepCountIs(3),   // 最多 3 步，避免超时
+    stopWhen: stepCountIs(4),
     tools: {
       check_memory: tool({
         description: '搜索前先查询记忆库，看是否已有相关文章',
@@ -18,28 +18,35 @@ export function createOrchestratorStream(message: string, modelId: ModelId = 'qw
         execute: async ({ query }) => {
           const result = await checkMemory(query, modelId)
           if (result) return `已有相关文章：《${result.title}》，slug: ${result.slug}，无需重复搜索。`
-          return '记忆库中未找到相关内容。'
+          return '记忆库中未找到相关内容，可以继续搜索。'
         },
       }),
-      search_and_save: tool({
-        description: '搜索网页内容并保存为博客文章（一步完成）',
+      search_web: tool({
+        description: '搜索网页，返回原始内容供整理',
         inputSchema: z.object({ query: z.string() }),
         execute: async ({ query }) => {
-          const results = await searchWeb(query, 3)
+          const results = await searchWeb(query, 5)
           if (results.length === 0) return '未找到相关内容'
-          const top = results.slice(0, 2)
-          const content = `## 概述\n\n${top[0].content.slice(0, 500)}\n\n## 参考资料\n\n${top.map(r => `- [${r.title}](${r.url})`).join('\n')}`
-          const slug = await saveArticle({
-            title: query,
-            content,
-            tags: [],
-            keywords: [query],
-            summary: top[0].content.slice(0, 100),
-          })
+          return results.map((r, i) =>
+            `### 来源 ${i + 1}：${r.title}\n${r.content.slice(0, 800)}\n链接：${r.url}`
+          ).join('\n\n---\n\n')
+        },
+      }),
+      save_article: tool({
+        description: '将整理好的 Markdown 文章保存到博客',
+        inputSchema: z.object({
+          title: z.string().describe('文章标题'),
+          content: z.string().describe('完整的 Markdown 文章内容，包含引言、正文、总结'),
+          tags: z.array(z.string()).describe('标签列表'),
+          keywords: z.array(z.string()).describe('关键词列表'),
+          summary: z.string().describe('一句话摘要（不超过50字）'),
+        }),
+        execute: async (input) => {
+          const slug = await saveArticle(input)
           const articles = await getAllArticles()
           const article = articles.find(a => a.slug === slug)
           if (article) await updateMemory(article)
-          return `已搜索并保存文章，slug: ${slug}`
+          return `✅ 文章《${input.title}》已保存，slug: ${slug}`
         },
       }),
       list_articles: tool({
@@ -48,7 +55,7 @@ export function createOrchestratorStream(message: string, modelId: ModelId = 'qw
         execute: async ({ tag }) => {
           const articles = await listArticles(tag ? { tag } : undefined)
           if (articles.length === 0) return '暂无文章'
-          return articles.map(a => `- ${a.slug}: ${a.title}`).join('\n')
+          return articles.map(a => `- ${a.slug}: ${a.title} [${a.tags.join(', ')}]`).join('\n')
         },
       }),
       search_blog: tool({
@@ -61,11 +68,14 @@ export function createOrchestratorStream(message: string, modelId: ModelId = 'qw
         },
       }),
     },
-    system: `你是个人技术博客的 AI 助手。
-规则：
-- 搜索类 → 先 check_memory，未命中再用 search_and_save（一步完成搜索+保存）
-- 管理类 → 用 list_articles 或 search_blog
-- 始终用中文回复，回答要简洁`,
+    system: `你是个人技术博客的 AI 助手，帮助用户搜索整理技术内容。
+
+工作流程：
+1. 搜索类请求 → 先 check_memory 查是否已有 → 未命中则 search_web 获取内容 → 你来整理成结构化 Markdown 文章（有引言、分节正文、代码示例、总结）→ 调用 save_article 保存
+2. 管理类请求 → 用 list_articles 或 search_blog
+
+重要：search_web 返回原始内容后，你必须自己整理成高质量文章再调用 save_article 保存，不要直接返回原始内容。
+始终用中文回复。`,
     prompt: message,
   })
 }
