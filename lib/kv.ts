@@ -2,24 +2,43 @@ import Redis from 'ioredis'
 
 let _client: Redis | null = null
 
-function getClient(): Redis {
+function getClient(): Redis | null {
+  const url = process.env.KV_REST_API_REDIS_URL
+  if (!url) return null
   if (!_client) {
-    const url = process.env.KV_REST_API_REDIS_URL
-    if (!url) throw new Error('KV_REST_API_REDIS_URL is not set')
-    _client = new Redis(url, { maxRetriesPerRequest: 3, lazyConnect: false })
+    _client = new Redis(url, {
+      maxRetriesPerRequest: 1,
+      connectTimeout: 5000,
+      lazyConnect: false,
+    })
+    _client.on('error', () => {
+      // suppress unhandled error events
+    })
   }
   return _client
 }
 
 export const kv = {
   async get<T>(key: string): Promise<T | null> {
-    const raw = await getClient().get(key)
-    if (raw === null) return null
-    try { return JSON.parse(raw) as T }
-    catch { return raw as unknown as T }
+    try {
+      const client = getClient()
+      if (!client) return null
+      const raw = await client.get(key)
+      if (raw === null) return null
+      try { return JSON.parse(raw) as T }
+      catch { return raw as unknown as T }
+    } catch {
+      return null
+    }
   },
   async set(key: string, value: unknown): Promise<string> {
-    await getClient().set(key, JSON.stringify(value))
+    try {
+      const client = getClient()
+      if (!client) return 'OK'
+      await client.set(key, JSON.stringify(value))
+    } catch {
+      // silently fail if Redis unavailable
+    }
     return 'OK'
   },
 }
