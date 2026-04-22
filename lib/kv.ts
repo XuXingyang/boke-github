@@ -10,6 +10,7 @@ function getClient(): Redis | null {
       maxRetriesPerRequest: 1,
       connectTimeout: 5000,
       lazyConnect: false,
+      tls: url.startsWith('rediss://') ? { rejectUnauthorized: false } : undefined,
     })
     _client.on('error', () => {
       // suppress unhandled error events
