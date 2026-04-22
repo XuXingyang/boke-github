@@ -13,16 +13,22 @@ export function StatsBar({ totalArticles }: StatsBarProps) {
 
   useEffect(() => {
     fetch('/api/checkin')
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error('Failed to fetch checkin data')
+        return r.json()
+      })
       .then((data) => {
-        setStreak(data.streak)
-        setRecord(data.record)
+        if (data.streak) setStreak(data.streak)
+        if (data.record) setRecord(data.record)
+      })
+      .catch(() => {
+        // Silently fail: keep default zero values
       })
   }, [])
 
   const hours = (record.study_seconds / 3600).toFixed(1)
   const completedCount = record.articles_read.length
-  const monthProgress = totalArticles > 0 ? Math.round((completedCount / totalArticles) * 100) : 0
+  const monthProgress = totalArticles > 0 ? Math.min(100, Math.round((completedCount / totalArticles) * 100)) : 0
 
   return (
     <div className="bg-gradient-nav border-b border-border-purple px-6 py-2.5 flex gap-5 items-center text-xs">
