@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { kv } from '@vercel/kv'
 
 vi.mock('@vercel/kv', () => {
-  const store = new Map<string, unknown>()
   return {
     kv: {
-      get: vi.fn((key: string) => Promise.resolve(store.get(key) ?? null)),
-      set: vi.fn((key: string, val: unknown) => { store.set(key, val); return Promise.resolve() }),
-      getdel: vi.fn((key: string) => { const v = store.get(key); store.delete(key); return Promise.resolve(v ?? null) }),
+      get: vi.fn(),
+      set: vi.fn(),
+      getdel: vi.fn(),
     },
   }
 })
@@ -19,10 +19,20 @@ import {
   markArticleRead,
   getStreak,
   getDailyStats,
+  getArticleProgress,
 } from '@/lib/checkin'
 
+let store: Map<string, unknown>
+
 beforeEach(() => {
-  vi.clearAllMocks()
+  store = new Map()
+  vi.mocked(kv.get).mockImplementation((key: string) =>
+    Promise.resolve((store.get(key) as any) ?? null)
+  )
+  vi.mocked(kv.set).mockImplementation((key: string, val: unknown) => {
+    store.set(key, val)
+    return Promise.resolve('OK' as any)
+  })
 })
 
 describe('checkin utilities', () => {
@@ -33,7 +43,6 @@ describe('checkin utilities', () => {
 
   it('markDailyCheckin sets checked=true', async () => {
     await markDailyCheckin('2026-04-18')
-    const { kv } = await import('@vercel/kv')
     expect(kv.set).toHaveBeenCalledWith(
       'checkin:2026-04-18',
       expect.objectContaining({ checked: true })
@@ -41,8 +50,7 @@ describe('checkin utilities', () => {
   })
 
   it('addStudySeconds accumulates time', async () => {
-    const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockResolvedValueOnce({ checked: true, study_seconds: 1800, articles_read: [] })
+    store.set('checkin:2026-04-18', { checked: true, study_seconds: 1800, articles_read: [] })
     await addStudySeconds('2026-04-18', 600)
     expect(kv.set).toHaveBeenCalledWith(
       'checkin:2026-04-18',
@@ -51,8 +59,7 @@ describe('checkin utilities', () => {
   })
 
   it('markArticleRead adds slug to articles_read', async () => {
-    const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockResolvedValueOnce({ checked: true, study_seconds: 0, articles_read: [] })
+    store.set('checkin:2026-04-18', { checked: true, study_seconds: 0, articles_read: [] })
     await markArticleRead('2026-04-18', 'react-hooks')
     expect(kv.set).toHaveBeenCalledWith(
       'checkin:2026-04-18',
@@ -61,16 +68,28 @@ describe('checkin utilities', () => {
   })
 
   it('streak increments on consecutive days', async () => {
-    const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockResolvedValueOnce({ count: 5, last_date: '2026-04-17', longest: 10 })
+    store.set('streak:current', { count: 5, last_date: '2026-04-17', longest: 10 })
     const streak = await getStreak('2026-04-18')
     expect(streak.count).toBe(6)
   })
 
   it('streak resets on non-consecutive day', async () => {
-    const { kv } = await import('@vercel/kv')
-    vi.mocked(kv.get).mockResolvedValueOnce({ count: 5, last_date: '2026-04-15', longest: 10 })
+    store.set('streak:current', { count: 5, last_date: '2026-04-15', longest: 10 })
     const streak = await getStreak('2026-04-18')
     expect(streak.count).toBe(1)
+  })
+
+  it('getArticleProgress returns null for unknown slug', async () => {
+    const progress = await getArticleProgress('unknown-slug')
+    expect(progress).toBeNull()
+  })
+
+  it('getArticleProgress returns progress after markArticleRead', async () => {
+    store.set('checkin:2026-04-18', { checked: true, study_seconds: 0, articles_read: [] })
+    await markArticleRead('2026-04-18', 'react-19')
+    const progress = await getArticleProgress('react-19')
+    expect(progress).not.toBeNull()
+    expect(progress?.completed).toBe(true)
+    expect(progress?.progress).toBe(100)
   })
 })
